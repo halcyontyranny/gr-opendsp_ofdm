@@ -63,7 +63,7 @@ blocks:
   id: variable
   parameters:
     comment: Shared dial frequency in Hz. Both HackRFs tune here for loopback testing.
-    value: 144e6
+    value: 432.1e6
   states:
     bus_sink: false
     bus_source: false
@@ -76,7 +76,7 @@ blocks:
   parameters:
     comment: 'ACM tier override: -1 = adaptive. 0=50 Hz survival, 4=2 kHz QPSK, 8=3.5
       kHz 16QAM.'
-    value: '0'
+    value: '4'
   states:
     bus_sink: false
     bus_source: false
@@ -157,14 +157,9 @@ blocks:
     rotation: 0
     state: enabled
 - name: transmit_a
-  id: variable_qtgui_check_box
+  id: variable
   parameters:
-    comment: PTT for Station A (HackRF A). Check before sending, uncheck when done.
-    'false': 'False'
-    gui_hint: 0,0,1,1
-    label: PTT Station A
-    'true': 'True'
-    type: bool
+    comment: TX state for Station A -- controlled by send_gate_a via set_transmit_a.
     value: 'False'
   states:
     bus_sink: false
@@ -174,14 +169,9 @@ blocks:
     rotation: 0
     state: enabled
 - name: transmit_b
-  id: variable_qtgui_check_box
+  id: variable
   parameters:
-    comment: PTT for Station B (HackRF B). Check before sending, uncheck when done.
-    'false': 'False'
-    gui_hint: 0,1,1,1
-    label: PTT Station B
-    'true': 'True'
-    type: bool
+    comment: TX state for Station B -- controlled by send_gate_b via set_transmit_b.
     value: 'False'
   states:
     bus_sink: false
@@ -420,17 +410,201 @@ blocks:
     coordinate: [940, 740]
     rotation: 0
     state: enabled
+- name: qtgui_const_sink_rx_a
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '0.8'
+    alpha10: '0.8'
+    alpha2: '0.8'
+    alpha3: '0.8'
+    alpha4: '0.8'
+    alpha5: '0.8'
+    alpha6: '0.8'
+    alpha7: '0.8'
+    alpha8: '0.8'
+    alpha9: '0.8'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"red"'
+    color2: '"red"'
+    color3: '"red"'
+    color4: '"red"'
+    color5: '"red"'
+    color6: '"red"'
+    color7: '"red"'
+    color8: '"red"'
+    color9: '"red"'
+    comment: Station A RX IQ constellation at 8 kHz (shows modulation symbol cloud).
+    grid: 'False'
+    gui_hint: tab@1:2,0,1,2
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '0'
+    marker10: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    name: '"A: RX IQ Constellation"'
+    nconnections: '1'
+    size: '1024'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [940, 580]
+    rotation: 0
+    state: enabled
+- name: qtgui_const_sink_rx_b
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '0.8'
+    alpha10: '0.8'
+    alpha2: '0.8'
+    alpha3: '0.8'
+    alpha4: '0.8'
+    alpha5: '0.8'
+    alpha6: '0.8'
+    alpha7: '0.8'
+    alpha8: '0.8'
+    alpha9: '0.8'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"red"'
+    color2: '"red"'
+    color3: '"red"'
+    color4: '"red"'
+    color5: '"red"'
+    color6: '"red"'
+    color7: '"red"'
+    color8: '"red"'
+    color9: '"red"'
+    comment: Station B RX IQ constellation at 8 kHz.
+    grid: 'False'
+    gui_hint: tab@3:2,0,1,2
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '0'
+    marker10: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    name: '"B: RX IQ Constellation"'
+    nconnections: '1'
+    size: '1024'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [940, 940]
+    rotation: 0
+    state: enabled
 - name: qtgui_edit_box_msg_a
   id: qtgui_edit_box_msg
   parameters:
     affinity: ''
     alias: ''
-    comment: Station A TX input. Check PTT A first, then press Enter to transmit.
+    comment: Station A TX input. Type message and press Enter to buffer, then click Send A.
     gui_hint: tab@0:0,0,1,2
     is_pair: 'False'
     is_static: 'False'
     key: ''
-    label: '"Station A TX (check PTT A first)"'
+    label: '"A: type message + Enter to buffer, then click Send A"'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: string
@@ -447,12 +621,12 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: Station B TX input. Check PTT B first, then press Enter to transmit.
+    comment: Station B TX input. Type message and press Enter to buffer, then click Send B.
     gui_hint: tab@2:0,0,1,2
     is_pair: 'False'
     is_static: 'False'
     key: ''
-    label: '"Station B TX (check PTT B first)"'
+    label: '"B: type message + Enter to buffer, then click Send B"'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: string
@@ -462,6 +636,50 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [8, 668]
+    rotation: 0
+    state: enabled
+- name: qtgui_edit_box_msg_rx_a
+  id: qtgui_edit_box_msg
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Last decoded message received at Station A. Updated on each decoded frame.
+    gui_hint: tab@1:3,0,1,2
+    is_pair: 'True'
+    is_static: 'True'
+    key: decoded
+    label: '"Last Received at A"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: string
+    value: '"(none yet)"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 580]
+    rotation: 0
+    state: enabled
+- name: qtgui_edit_box_msg_rx_b
+  id: qtgui_edit_box_msg
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Last decoded message received at Station B.
+    gui_hint: tab@3:3,0,1,2
+    is_pair: 'True'
+    is_static: 'True'
+    key: decoded
+    label: '"Last Received at B"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: string
+    value: '"(none yet)"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 940]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_rx_a
@@ -788,6 +1006,394 @@ blocks:
     coordinate: [280, 560]
     rotation: 0
     state: enabled
+- name: qtgui_time_sink_rx_a
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: Station A RX IQ time domain at 8 kHz -- I (blue) and Q (red).
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: tab@1:1,0,1,2
+    label1: I
+    label10: ''
+    label2: Q
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"A: RX IQ"'
+    nconnections: '1'
+    size: '1024'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [940, 500]
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_rx_b
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: Station B RX IQ time domain at 8 kHz -- I (blue) and Q (red).
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: tab@3:1,0,1,2
+    label1: I
+    label10: ''
+    label2: Q
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"B: RX IQ"'
+    nconnections: '1'
+    size: '1024'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [940, 860]
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_tx_a
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: Station A TX IQ at 8 kHz (hilbert output) -- I (blue) and Q (red).
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: tab@0:2,0,1,2
+    label1: I
+    label10: ''
+    label2: Q
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"A: TX IQ"'
+    nconnections: '1'
+    size: '1024'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 380]
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_tx_b
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: Station B TX IQ at 8 kHz (hilbert output) -- I (blue) and Q (red).
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: tab@2:2,0,1,2
+    label1: I
+    label10: ''
+    label2: Q
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"B: TX IQ"'
+    nconnections: '1'
+    size: '1024'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 740]
+    rotation: 0
+    state: enabled
 - name: rational_resampler_rx_a
   id: rational_resampler_xxx
   parameters:
@@ -868,592 +1474,12 @@ blocks:
     coordinate: [700, 660]
     rotation: 0
     state: enabled
-# -- New display blocks --
-
-- name: qtgui_const_sink_rx_a
-  id: qtgui_const_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    alpha1: '0.8'
-    alpha2: '0.8'
-    alpha3: '0.8'
-    alpha4: '0.8'
-    alpha5: '0.8'
-    alpha6: '0.8'
-    alpha7: '0.8'
-    alpha8: '0.8'
-    alpha9: '0.8'
-    alpha10: '0.8'
-    comment: Station A RX IQ constellation at 8 kHz (shows modulation symbol cloud).
-    gui_hint: tab@1:2,0,1,2
-    label1: ''
-    label2: ''
-    label3: ''
-    label4: ''
-    label5: ''
-    label6: ''
-    label7: ''
-    label8: ''
-    label9: ''
-    label10: ''
-    legend: 'True'
-    marker1: '0'
-    marker2: '0'
-    marker3: '0'
-    marker4: '0'
-    marker5: '0'
-    marker6: '0'
-    marker7: '0'
-    marker8: '0'
-    marker9: '0'
-    marker10: '0'
-    name: '"A: RX IQ Constellation"'
-    nconnections: '1'
-    showports: 'False'
-    style1: '0'
-    style2: '0'
-    style3: '0'
-    style4: '0'
-    style5: '0'
-    style6: '0'
-    style7: '0'
-    style8: '0'
-    style9: '0'
-    style10: '0'
-    tr_chan: '0'
-    tr_level: '0.0'
-    tr_mode: qtgui.TRIG_MODE_FREE
-    type: complex
-    update_time: '0.10'
-    width1: '1'
-    width2: '1'
-    width3: '1'
-    width4: '1'
-    width5: '1'
-    width6: '1'
-    width7: '1'
-    width8: '1'
-    width9: '1'
-    width10: '1'
-    xmax: '2'
-    xmin: '-2'
-    ymax: '2'
-    ymin: '-2'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [940, 580]
-    rotation: 0
-    state: enabled
-
-- name: qtgui_const_sink_rx_b
-  id: qtgui_const_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    alpha1: '0.8'
-    alpha2: '0.8'
-    alpha3: '0.8'
-    alpha4: '0.8'
-    alpha5: '0.8'
-    alpha6: '0.8'
-    alpha7: '0.8'
-    alpha8: '0.8'
-    alpha9: '0.8'
-    alpha10: '0.8'
-    comment: Station B RX IQ constellation at 8 kHz.
-    gui_hint: tab@3:2,0,1,2
-    label1: ''
-    label2: ''
-    label3: ''
-    label4: ''
-    label5: ''
-    label6: ''
-    label7: ''
-    label8: ''
-    label9: ''
-    label10: ''
-    legend: 'True'
-    marker1: '0'
-    marker2: '0'
-    marker3: '0'
-    marker4: '0'
-    marker5: '0'
-    marker6: '0'
-    marker7: '0'
-    marker8: '0'
-    marker9: '0'
-    marker10: '0'
-    name: '"B: RX IQ Constellation"'
-    nconnections: '1'
-    showports: 'False'
-    style1: '0'
-    style2: '0'
-    style3: '0'
-    style4: '0'
-    style5: '0'
-    style6: '0'
-    style7: '0'
-    style8: '0'
-    style9: '0'
-    style10: '0'
-    tr_chan: '0'
-    tr_level: '0.0'
-    tr_mode: qtgui.TRIG_MODE_FREE
-    type: complex
-    update_time: '0.10'
-    width1: '1'
-    width2: '1'
-    width3: '1'
-    width4: '1'
-    width5: '1'
-    width6: '1'
-    width7: '1'
-    width8: '1'
-    width9: '1'
-    width10: '1'
-    xmax: '2'
-    xmin: '-2'
-    ymax: '2'
-    ymin: '-2'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [940, 940]
-    rotation: 0
-    state: enabled
-
-- name: qtgui_edit_box_msg_rx_a
-  id: qtgui_edit_box_msg
-  parameters:
-    comment: Last decoded message received at Station A. Updated on each decoded frame.
-    gui_hint: tab@1:3,0,1,2
-    is_pair: 'True'
-    is_static: 'True'
-    key: 'decoded'
-    label: '"Last Received at A"'
-    type: string
-    value: '"(none yet)"'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [280, 580]
-    rotation: 0
-    state: enabled
-
-- name: qtgui_edit_box_msg_rx_b
-  id: qtgui_edit_box_msg
-  parameters:
-    comment: Last decoded message received at Station B.
-    gui_hint: tab@3:3,0,1,2
-    is_pair: 'True'
-    is_static: 'True'
-    key: 'decoded'
-    label: '"Last Received at B"'
-    type: string
-    value: '"(none yet)"'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [280, 940]
-    rotation: 0
-    state: enabled
-
-- name: qtgui_time_sink_rx_a
-  id: qtgui_time_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    alpha1: '1.0'
-    alpha2: '1.0'
-    alpha3: '1.0'
-    alpha4: '1.0'
-    alpha5: '1.0'
-    alpha6: '1.0'
-    alpha7: '1.0'
-    alpha8: '1.0'
-    alpha9: '1.0'
-    alpha10: '1.0'
-    color1: blue
-    color2: red
-    color3: green
-    color4: black
-    color5: cyan
-    color6: magenta
-    color7: yellow
-    color8: dark red
-    color9: dark green
-    color10: dark blue
-    comment: Station A RX IQ time domain at 8 kHz -- I (blue) and Q (red).
-    ctrlpanel: 'False'
-    entags: 'True'
-    grid: 'True'
-    gui_hint: tab@1:1,0,1,2
-    label1: I
-    label2: Q
-    label3: ''
-    label4: ''
-    label5: ''
-    label6: ''
-    label7: ''
-    label8: ''
-    label9: ''
-    label10: ''
-    legend: 'True'
-    marker1: '-1'
-    marker2: '-1'
-    marker3: '-1'
-    marker4: '-1'
-    marker5: '-1'
-    marker6: '-1'
-    marker7: '-1'
-    marker8: '-1'
-    marker9: '-1'
-    marker10: '-1'
-    name: '"A: RX IQ"'
-    nconnections: '1'
-    ntpts: '1024'
-    samp_rate: samp_rate
-    showports: 'False'
-    stem: 'False'
-    style1: '1'
-    style2: '1'
-    style3: '1'
-    style4: '1'
-    style5: '1'
-    style6: '1'
-    style7: '1'
-    style8: '1'
-    style9: '1'
-    style10: '1'
-    tr_chan: '0'
-    tr_level: '0.0'
-    tr_mode: qtgui.TRIG_MODE_FREE
-    tr_slope: qtgui.TRIG_SLOPE_POS
-    tr_tag: '""'
-    type: complex
-    update_time: '0.10'
-    width1: '1'
-    width2: '1'
-    width3: '1'
-    width4: '1'
-    width5: '1'
-    width6: '1'
-    width7: '1'
-    width8: '1'
-    width9: '1'
-    width10: '1'
-    ylabel: Amplitude
-    ymax: '1'
-    ymin: '-1'
-    yunit: '""'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [940, 500]
-    rotation: 0
-    state: enabled
-
-- name: qtgui_time_sink_rx_b
-  id: qtgui_time_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    alpha1: '1.0'
-    alpha2: '1.0'
-    alpha3: '1.0'
-    alpha4: '1.0'
-    alpha5: '1.0'
-    alpha6: '1.0'
-    alpha7: '1.0'
-    alpha8: '1.0'
-    alpha9: '1.0'
-    alpha10: '1.0'
-    color1: blue
-    color2: red
-    color3: green
-    color4: black
-    color5: cyan
-    color6: magenta
-    color7: yellow
-    color8: dark red
-    color9: dark green
-    color10: dark blue
-    comment: Station B RX IQ time domain at 8 kHz -- I (blue) and Q (red).
-    ctrlpanel: 'False'
-    entags: 'True'
-    grid: 'True'
-    gui_hint: tab@3:1,0,1,2
-    label1: I
-    label2: Q
-    label3: ''
-    label4: ''
-    label5: ''
-    label6: ''
-    label7: ''
-    label8: ''
-    label9: ''
-    label10: ''
-    legend: 'True'
-    marker1: '-1'
-    marker2: '-1'
-    marker3: '-1'
-    marker4: '-1'
-    marker5: '-1'
-    marker6: '-1'
-    marker7: '-1'
-    marker8: '-1'
-    marker9: '-1'
-    marker10: '-1'
-    name: '"B: RX IQ"'
-    nconnections: '1'
-    ntpts: '1024'
-    samp_rate: samp_rate
-    showports: 'False'
-    stem: 'False'
-    style1: '1'
-    style2: '1'
-    style3: '1'
-    style4: '1'
-    style5: '1'
-    style6: '1'
-    style7: '1'
-    style8: '1'
-    style9: '1'
-    style10: '1'
-    tr_chan: '0'
-    tr_level: '0.0'
-    tr_mode: qtgui.TRIG_MODE_FREE
-    tr_slope: qtgui.TRIG_SLOPE_POS
-    tr_tag: '""'
-    type: complex
-    update_time: '0.10'
-    width1: '1'
-    width2: '1'
-    width3: '1'
-    width4: '1'
-    width5: '1'
-    width6: '1'
-    width7: '1'
-    width8: '1'
-    width9: '1'
-    width10: '1'
-    ylabel: Amplitude
-    ymax: '1'
-    ymin: '-1'
-    yunit: '""'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [940, 860]
-    rotation: 0
-    state: enabled
-
-- name: qtgui_time_sink_tx_a
-  id: qtgui_time_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    alpha1: '1.0'
-    alpha2: '1.0'
-    alpha3: '1.0'
-    alpha4: '1.0'
-    alpha5: '1.0'
-    alpha6: '1.0'
-    alpha7: '1.0'
-    alpha8: '1.0'
-    alpha9: '1.0'
-    alpha10: '1.0'
-    color1: blue
-    color2: red
-    color3: green
-    color4: black
-    color5: cyan
-    color6: magenta
-    color7: yellow
-    color8: dark red
-    color9: dark green
-    color10: dark blue
-    comment: Station A TX IQ at 8 kHz (hilbert output) -- I (blue) and Q (red).
-    ctrlpanel: 'False'
-    entags: 'True'
-    grid: 'True'
-    gui_hint: tab@0:2,0,1,2
-    label1: I
-    label2: Q
-    label3: ''
-    label4: ''
-    label5: ''
-    label6: ''
-    label7: ''
-    label8: ''
-    label9: ''
-    label10: ''
-    legend: 'True'
-    marker1: '-1'
-    marker2: '-1'
-    marker3: '-1'
-    marker4: '-1'
-    marker5: '-1'
-    marker6: '-1'
-    marker7: '-1'
-    marker8: '-1'
-    marker9: '-1'
-    marker10: '-1'
-    name: '"A: TX IQ"'
-    nconnections: '1'
-    ntpts: '1024'
-    samp_rate: samp_rate
-    showports: 'False'
-    stem: 'False'
-    style1: '1'
-    style2: '1'
-    style3: '1'
-    style4: '1'
-    style5: '1'
-    style6: '1'
-    style7: '1'
-    style8: '1'
-    style9: '1'
-    style10: '1'
-    tr_chan: '0'
-    tr_level: '0.0'
-    tr_mode: qtgui.TRIG_MODE_FREE
-    tr_slope: qtgui.TRIG_SLOPE_POS
-    tr_tag: '""'
-    type: complex
-    update_time: '0.10'
-    width1: '1'
-    width2: '1'
-    width3: '1'
-    width4: '1'
-    width5: '1'
-    width6: '1'
-    width7: '1'
-    width8: '1'
-    width9: '1'
-    width10: '1'
-    ylabel: Amplitude
-    ymax: '1'
-    ymin: '-1'
-    yunit: '""'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [560, 380]
-    rotation: 0
-    state: enabled
-
-- name: qtgui_time_sink_tx_b
-  id: qtgui_time_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    alpha1: '1.0'
-    alpha2: '1.0'
-    alpha3: '1.0'
-    alpha4: '1.0'
-    alpha5: '1.0'
-    alpha6: '1.0'
-    alpha7: '1.0'
-    alpha8: '1.0'
-    alpha9: '1.0'
-    alpha10: '1.0'
-    color1: blue
-    color2: red
-    color3: green
-    color4: black
-    color5: cyan
-    color6: magenta
-    color7: yellow
-    color8: dark red
-    color9: dark green
-    color10: dark blue
-    comment: Station B TX IQ at 8 kHz (hilbert output) -- I (blue) and Q (red).
-    ctrlpanel: 'False'
-    entags: 'True'
-    grid: 'True'
-    gui_hint: tab@2:2,0,1,2
-    label1: I
-    label2: Q
-    label3: ''
-    label4: ''
-    label5: ''
-    label6: ''
-    label7: ''
-    label8: ''
-    label9: ''
-    label10: ''
-    legend: 'True'
-    marker1: '-1'
-    marker2: '-1'
-    marker3: '-1'
-    marker4: '-1'
-    marker5: '-1'
-    marker6: '-1'
-    marker7: '-1'
-    marker8: '-1'
-    marker9: '-1'
-    marker10: '-1'
-    name: '"B: TX IQ"'
-    nconnections: '1'
-    ntpts: '1024'
-    samp_rate: samp_rate
-    showports: 'False'
-    stem: 'False'
-    style1: '1'
-    style2: '1'
-    style3: '1'
-    style4: '1'
-    style5: '1'
-    style6: '1'
-    style7: '1'
-    style8: '1'
-    style9: '1'
-    style10: '1'
-    tr_chan: '0'
-    tr_level: '0.0'
-    tr_mode: qtgui.TRIG_MODE_FREE
-    tr_slope: qtgui.TRIG_SLOPE_POS
-    tr_tag: '""'
-    type: complex
-    update_time: '0.10'
-    width1: '1'
-    width2: '1'
-    width3: '1'
-    width4: '1'
-    width5: '1'
-    width6: '1'
-    width7: '1'
-    width8: '1'
-    width9: '1'
-    width10: '1'
-    ylabel: Amplitude
-    ymax: '1'
-    ymin: '-1'
-    yunit: '""'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [560, 740]
-    rotation: 0
-    state: enabled
-
 - name: tab
   id: qtgui_tab_widget
   parameters:
     alias: ''
     comment: ''
-    gui_hint: 1,0,1,2
+    gui_hint: 1,0,1,4
     label0: A-TX
     label1: A-RX
     label10: Tab 10
@@ -1483,6 +1509,141 @@ blocks:
     rotation: 0
     state: enabled
 
+- name: send_btn_a
+  id: variable_qtgui_push_button
+  parameters:
+    comment: Click to enable TX and transmit buffered message for Station A.
+    gui_hint: 0,0,1,1
+    label: '"Send A"'
+    pressed: 'True'
+    released: 'False'
+    type: bool
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [700, 260]
+    rotation: 0
+    state: enabled
+- name: stop_btn_a
+  id: variable_qtgui_push_button
+  parameters:
+    comment: Click to stop TX and return Station A to RX mode.
+    gui_hint: 0,1,1,1
+    label: '"Stop TX A"'
+    pressed: 'True'
+    released: 'False'
+    type: bool
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [800, 260]
+    rotation: 0
+    state: enabled
+- name: send_btn_b
+  id: variable_qtgui_push_button
+  parameters:
+    comment: Click to enable TX and transmit buffered message for Station B.
+    gui_hint: 0,2,1,1
+    label: '"Send B"'
+    pressed: 'True'
+    released: 'False'
+    type: bool
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [700, 620]
+    rotation: 0
+    state: enabled
+- name: stop_btn_b
+  id: variable_qtgui_push_button
+  parameters:
+    comment: Click to stop TX and return Station B to RX mode.
+    gui_hint: 0,3,1,1
+    label: '"Stop TX B"'
+    pressed: 'True'
+    released: 'False'
+    type: bool
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [800, 620]
+    rotation: 0
+    state: enabled
+- name: send_gate_a
+  id: epy_block
+  parameters:
+    _source_code: "import pmt\nfrom gnuradio import gr\n\n\nclass blk(gr.basic_block):\n\
+      \    \"\"\"Send Gate: buffers edit-box message and enables TX when Send A is\
+      \ clicked.\\nStop TX A disables TX.\"\"\"\n\n    def __init__(self, set_ptt_cb=None,\
+      \ send_trigger=False, stop_trigger=False):\n        gr.basic_block.__init__(self,\
+      \ name='SendGate', in_sig=None, out_sig=None)\n        self._set_ptt = set_ptt_cb\n\
+      \        self._pending = None\n        self._send_trigger = bool(send_trigger)\n\
+      \        self._stop_trigger = bool(stop_trigger)\n        self.message_port_register_in(pmt.intern('msg_in'))\n\
+      \        self.message_port_register_out(pmt.intern('msg_out'))\n        self.set_msg_handler(pmt.intern('msg_in'),\
+      \ self._on_msg)\n\n    def _on_msg(self, msg):\n        self._pending = msg\n\
+      \n    @property\n    def send_trigger(self):\n        return self._send_trigger\n\
+      \n    @send_trigger.setter\n    def send_trigger(self, val):\n        val =\
+      \ bool(val)\n        if val and not self._send_trigger:\n            if self._set_ptt\
+      \ is not None:\n                self._set_ptt(True)\n            if self._pending\
+      \ is not None:\n                self.message_port_pub(pmt.intern('msg_out'),\
+      \ self._pending)\n        self._send_trigger = val\n\n    @property\n    def\
+      \ stop_trigger(self):\n        return self._stop_trigger\n\n    @stop_trigger.setter\n\
+      \    def stop_trigger(self, val):\n        val = bool(val)\n        if val and\
+      \ not self._stop_trigger:\n            if self._set_ptt is not None:\n      \
+      \          self._set_ptt(False)\n        self._stop_trigger = val\n"
+    send_trigger: send_btn_a
+    set_ptt_cb: 'lambda v: self.set_transmit_a(v)'
+    stop_trigger: stop_btn_a
+  states:
+    _io_cache: ''
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [100, 380]
+    rotation: 0
+    state: enabled
+- name: send_gate_b
+  id: epy_block
+  parameters:
+    _source_code: "import pmt\nfrom gnuradio import gr\n\n\nclass blk(gr.basic_block):\n\
+      \    \"\"\"Send Gate: buffers edit-box message and enables TX when Send B is\
+      \ clicked.\\nStop TX B disables TX.\"\"\"\n\n    def __init__(self, set_ptt_cb=None,\
+      \ send_trigger=False, stop_trigger=False):\n        gr.basic_block.__init__(self,\
+      \ name='SendGate', in_sig=None, out_sig=None)\n        self._set_ptt = set_ptt_cb\n\
+      \        self._pending = None\n        self._send_trigger = bool(send_trigger)\n\
+      \        self._stop_trigger = bool(stop_trigger)\n        self.message_port_register_in(pmt.intern('msg_in'))\n\
+      \        self.message_port_register_out(pmt.intern('msg_out'))\n        self.set_msg_handler(pmt.intern('msg_in'),\
+      \ self._on_msg)\n\n    def _on_msg(self, msg):\n        self._pending = msg\n\
+      \n    @property\n    def send_trigger(self):\n        return self._send_trigger\n\
+      \n    @send_trigger.setter\n    def send_trigger(self, val):\n        val =\
+      \ bool(val)\n        if val and not self._send_trigger:\n            if self._set_ptt\
+      \ is not None:\n                self._set_ptt(True)\n            if self._pending\
+      \ is not None:\n                self.message_port_pub(pmt.intern('msg_out'),\
+      \ self._pending)\n        self._send_trigger = val\n\n    @property\n    def\
+      \ stop_trigger(self):\n        return self._stop_trigger\n\n    @stop_trigger.setter\n\
+      \    def stop_trigger(self, val):\n        val = bool(val)\n        if val and\
+      \ not self._stop_trigger:\n            if self._set_ptt is not None:\n      \
+      \          self._set_ptt(False)\n        self._stop_trigger = val\n"
+    send_trigger: send_btn_b
+    set_ptt_cb: 'lambda v: self.set_transmit_b(v)'
+    stop_trigger: stop_btn_b
+  states:
+    _io_cache: ''
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [100, 740]
+    rotation: 0
+    state: enabled
+
 connections:
 - [blocks_complex_to_float_a, '0', opendsp_ofdm_rx_sink_a, '0']
 - [blocks_complex_to_float_b, '0', opendsp_ofdm_rx_sink_b, '0']
@@ -1491,8 +1652,8 @@ connections:
 - [hilbert_fc_b, '0', qtgui_time_sink_tx_b, '0']
 - [hilbert_fc_b, '0', rational_resampler_tx_b, '0']
 - [opendsp_ofdm_rx_sink_a, frame_out, blocks_message_debug_a, print]
-- [opendsp_ofdm_rx_sink_b, frame_out, blocks_message_debug_b, print]
 - [opendsp_ofdm_rx_sink_a, frame_out, qtgui_edit_box_msg_rx_a, val]
+- [opendsp_ofdm_rx_sink_b, frame_out, blocks_message_debug_b, print]
 - [opendsp_ofdm_rx_sink_b, frame_out, qtgui_edit_box_msg_rx_b, val]
 - [opendsp_ofdm_tx_source_a, '0', hilbert_fc_a, '0']
 - [opendsp_ofdm_tx_source_a, '0', qtgui_freq_sink_tx_a, '0']
@@ -1502,8 +1663,10 @@ connections:
 - [osmosdr_transceiver_a, '0', rational_resampler_rx_a, '0']
 - [osmosdr_transceiver_b, '0', qtgui_freq_sink_rx_b, '0']
 - [osmosdr_transceiver_b, '0', rational_resampler_rx_b, '0']
-- [qtgui_edit_box_msg_a, msg, opendsp_ofdm_tx_source_a, msg_in]
-- [qtgui_edit_box_msg_b, msg, opendsp_ofdm_tx_source_b, msg_in]
+- [qtgui_edit_box_msg_a, msg, send_gate_a, msg_in]
+- [qtgui_edit_box_msg_b, msg, send_gate_b, msg_in]
+- [send_gate_a, msg_out, opendsp_ofdm_tx_source_a, msg_in]
+- [send_gate_b, msg_out, opendsp_ofdm_tx_source_b, msg_in]
 - [rational_resampler_rx_a, '0', blocks_complex_to_float_a, '0']
 - [rational_resampler_rx_a, '0', qtgui_const_sink_rx_a, '0']
 - [rational_resampler_rx_a, '0', qtgui_time_sink_rx_a, '0']
