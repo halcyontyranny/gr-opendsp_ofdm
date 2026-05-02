@@ -6,17 +6,7 @@ options:
     cmake_opt: ''
     comment: ''
     copyright: ''
-    description: "OpenDSP OFDM on HackRF -- adaptive HF OFDM via osmosdr_transceiver.\n\
-      \nSignal chain:\n  TX: opendsp_ofdm_tx_source (float, 8 kHz)\n        ->\
-      \ hilbert_fc (float->complex analytic/USB signal)\n        -> rational_resampler\
-      \ (x250, 8 kHz->2 MHz)\n        -> osmosdr_transceiver (HackRF TX)\n\
-      \  RX: osmosdr_transceiver (HackRF RX)\n        -> rational_resampler (\
-      /250, 2 MHz->8 kHz)\n        -> complex_to_float (USB demod: take I channel)\n\
-      \        -> opendsp_ofdm_rx_sink\n\nFrequency planning: set center_freq\
-      \ to your dial frequency (e.g. 14.074 MHz\nfor 20m digital). The OFDM signal\
-      \ occupies center_freq + 500 Hz to\ncenter_freq + 3500 Hz (USB convention).\n\
-      \nPTT: check the PTT box BEFORE pressing Enter in the TX message field.\nUncheck\
-      \ PTT once the transmission finishes to return to receive."
+    description: OpenDSP OFDM on HackRF -- half-duplex HF OFDM via osmosdr_transceiver. TX uses hilbert_fc + rational_resampler x250 (8 kHz to 2 MHz). RX reverses. PTT checkbox controls set_transmit().
     gen_cmake: 'On'
     gen_linking: dynamic
     generate_options: qt_gui
