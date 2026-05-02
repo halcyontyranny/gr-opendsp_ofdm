@@ -1,0 +1,289 @@
+options:
+  parameters:
+    author: KF0UXU
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: OpenDSP OFDM adaptive HF modem — audio loopback / soundcard demo.
+      Connect TX audio out to RX audio in (via cable or soundcard loopback) to test
+      end-to-end. Sample rate must be 8000 Hz on both source and sink.
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: opendsp_ofdm_audio_demo
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: OpenDSP OFDM Audio Demo
+    window_size: (1200,800)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+
+# ── Variables ─────────────────────────────────────────────────────────────────
+
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: 'Must be 8000 — the opendsp-ofdm modem is designed for 8 kHz (SSB passband).
+      If your soundcard does not support 8000 sps natively, insert a
+      rational_resampler between the audio blocks and the modem blocks.'
+    value: '8000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 100]
+    rotation: 0
+    state: enabled
+
+- name: callsign
+  id: variable
+  parameters:
+    comment: Your station callsign (up to 6 chars). Change here to update both TX and RX.
+    value: '"N0CALL"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 100]
+    rotation: 0
+    state: enabled
+
+- name: force_tier
+  id: variable
+  parameters:
+    comment: 'ACM tier override: -1 = adaptive, 0-8 = forced.
+      Tier 0 = 50 Hz survival (~100 s/msg), Tier 4 = 2 kHz QPSK (~1 kbps).'
+    value: '-1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 100]
+    rotation: 0
+    state: enabled
+
+# ── GUI tab container ─────────────────────────────────────────────────────────
+
+- name: tab
+  id: qtgui_tab_widget
+  parameters:
+    comment: ''
+    gui_hint: 0,0,1,2
+    label0: TX
+    label1: RX
+    num_tabs: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [600, 100]
+    rotation: 0
+    state: enabled
+
+# ── TX path ───────────────────────────────────────────────────────────────────
+
+- name: qtgui_edit_box_msg_0
+  id: qtgui_edit_box_msg
+  parameters:
+    comment: 'Type a message and press Enter to transmit. The modem encodes the text,
+      applies LDPC FEC, and streams the OFDM waveform to the audio sink.'
+    gui_hint: tab@0:0,0,1,2
+    is_pair: 'False'
+    is_static: 'False'
+    key: ''
+    label: '"Transmit Message (press Enter)"'
+    type: string
+    value: '"Hello via OFDM!"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 244]
+    rotation: 0
+    state: enabled
+
+- name: opendsp_ofdm_tx_source_0
+  id: opendsp_ofdm_tx_source
+  parameters:
+    callsign: callsign
+    comment: 'Receives text messages on msg_in, outputs OFDM float32 samples at
+      8000 sps. Output is silent (zeros) between transmissions.'
+    force_tier: force_tier
+    verbose: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [340, 228]
+    rotation: 0
+    state: enabled
+
+- name: audio_sink_0
+  id: audio_sink
+  parameters:
+    comment: 'Connect physical TX audio output to your radio line-in or
+      use a virtual audio cable for loopback testing.'
+    device_name: ''
+    num_inputs: '1'
+    ok_to_block: 'True'
+    samp_rate: samp_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [660, 252]
+    rotation: 0
+    state: enabled
+
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
+  parameters:
+    autoscale: 'False'
+    average: '0.2'
+    axislabels: 'True'
+    bw: samp_rate
+    comment: 'Shows the OFDM signal spectrum. The occupied bandwidth shifts with
+      ACM tier: 50 Hz (tier 0) through 3.5 kHz (tier 8).'
+    fc: '0'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'True'
+    gui_hint: tab@0:1,0,1,2
+    label: '"TX Spectrum"'
+    name: '"TX Spectrum"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    type: float
+    update_time: '0.10'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [660, 340]
+    rotation: 0
+    state: enabled
+
+# ── RX path ───────────────────────────────────────────────────────────────────
+
+- name: audio_source_0
+  id: audio_source
+  parameters:
+    comment: 'Connect physical RX audio input from your radio line-out or
+      use a virtual audio cable for loopback testing.'
+    device_name: ''
+    num_outputs: '1'
+    ok_to_block: 'True'
+    samp_rate: samp_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 548]
+    rotation: 0
+    state: enabled
+
+- name: opendsp_ofdm_rx_sink_0
+  id: opendsp_ofdm_rx_sink
+  parameters:
+    callsign: callsign
+    comment: 'Demodulates incoming OFDM samples. Decoded frames are posted to
+      frame_out as PDU pairs: pmt.cons({"callsign":..,"tier":..,"fec_ok":..}, text).
+      The verbose flag also prints decoded frames and SNR to the console.'
+    force_tier: force_tier
+    verbose: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [340, 532]
+    rotation: 0
+    state: enabled
+
+- name: blocks_message_debug_0
+  id: blocks_message_debug
+  parameters:
+    comment: 'Decoded frames printed here and in the GRC console.
+      PDU format: ({"callsign":"W1AW","tier":3,"fec_ok":True}, "Hello via OFDM!")'
+    en_uvec: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [660, 532]
+    rotation: 0
+    state: enabled
+
+- name: qtgui_freq_sink_x_1
+  id: qtgui_freq_sink_x
+  parameters:
+    autoscale: 'False'
+    average: '0.2'
+    axislabels: 'True'
+    bw: samp_rate
+    comment: 'Shows incoming audio spectrum. Watch for the OFDM signal to appear
+      in the 500–3500 Hz range when a remote station is transmitting.'
+    fc: '0'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'True'
+    gui_hint: tab@1:0,0,1,2
+    label: '"RX Spectrum"'
+    name: '"RX Spectrum"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    type: float
+    update_time: '0.10'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [660, 620]
+    rotation: 0
+    state: enabled
+
+# ── Connections ───────────────────────────────────────────────────────────────
+
+connections:
+
+# TX stream: modem output → audio sink + spectrum display
+- [opendsp_ofdm_tx_source_0, '0', audio_sink_0, '0']
+- [opendsp_ofdm_tx_source_0, '0', qtgui_freq_sink_x_0, '0']
+
+# RX stream: audio source → modem input + spectrum display
+- [audio_source_0, '0', opendsp_ofdm_rx_sink_0, '0']
+- [audio_source_0, '0', qtgui_freq_sink_x_1, '0']
+
+# TX message: edit box → modem message port
+- [qtgui_edit_box_msg_0, msg, opendsp_ofdm_tx_source_0, msg_in]
+
+# RX message: decoded frames → message debug (console)
+- [opendsp_ofdm_rx_sink_0, frame_out, blocks_message_debug_0, print]
+
+metadata:
+  file_format: 1
