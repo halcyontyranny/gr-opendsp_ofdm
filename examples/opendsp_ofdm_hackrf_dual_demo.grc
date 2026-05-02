@@ -1033,7 +1033,7 @@ blocks:
     gui_hint: tab@1:3,0,1,2
     is_pair: 'True'
     is_static: 'True'
-    key: ''
+    key: 'decoded'
     label: '"Last Received at A"'
     type: string
     value: '"(none yet)"'
@@ -1052,7 +1052,7 @@ blocks:
     gui_hint: tab@3:3,0,1,2
     is_pair: 'True'
     is_static: 'True'
-    key: ''
+    key: 'decoded'
     label: '"Last Received at B"'
     type: string
     value: '"(none yet)"'
