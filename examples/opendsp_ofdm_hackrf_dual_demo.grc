@@ -130,7 +130,7 @@ blocks:
 - name: force_tier
   id: variable
   parameters:
-    comment: ACM tier override: -1 = adaptive. 0=50 Hz survival, 4=2 kHz QPSK, 8=3.5 kHz 16QAM.
+    comment: 'ACM tier override: -1 = adaptive. 0=50 Hz survival, 4=2 kHz QPSK, 8=3.5 kHz 16QAM.'
     value: '-1'
   states:
     bus_sink: false
