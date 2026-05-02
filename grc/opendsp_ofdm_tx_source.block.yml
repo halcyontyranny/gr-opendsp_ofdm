@@ -1,0 +1,73 @@
+id: opendsp_ofdm_tx_source
+label: OpenDSP OFDM TX Source
+category: '[OpenDSP OFDM]'
+flags: [python]
+
+parameters:
+-   id: callsign
+    label: Callsign
+    dtype: string
+    default: '"N0CALL"'
+    hide: none
+-   id: force_tier
+    label: ACM Tier (-1=adaptive)
+    dtype: int
+    default: '-1'
+    hide: none
+-   id: verbose
+    label: Verbose
+    dtype: enum
+    default: 'False'
+    options: ['False', 'True']
+    option_labels: ['Off', 'On']
+    hide: part
+
+inputs:
+-   domain: message
+    id: msg_in
+    optional: false
+
+outputs:
+-   domain: stream
+    dtype: float
+    label: out
+    vlen: 1
+
+templates:
+    imports: from gnuradio import opendsp_ofdm
+    make: opendsp_ofdm.tx_source(${callsign}, ${force_tier}, ${verbose})
+    callbacks:
+    - set_callsign(${callsign})
+    - set_force_tier(${force_tier})
+    - set_verbose(${verbose})
+
+documentation: |-
+    OpenDSP OFDM TX Source
+
+    Modulates text messages into a float32 OFDM sample stream at 8000 Hz.
+    Connect a text source (e.g. QT GUI Message Edit Box) to msg_in.
+    Connect the float output to an Audio Sink or SDR sink set to 8000 sps.
+
+    Messages on msg_in:
+      - PMT symbol/string (from QT GUI Message Edit Box)
+      - PDU pair: pmt.cons(meta, pmt.intern("text"))
+      - PDU pair with u8vector payload
+
+    Parameters:
+      Callsign         : Your station callsign (up to 6 chars), embedded in every frame.
+      ACM Tier (-1=adaptive): Force a specific ACM tier 0-8, or -1 to let the
+                        engine adapt based on the received ACK tier.
+        Tier 0: 50 Hz BPSK 1/3 x4 passes — ~2 bps, decodes to -25 dB SNR (2500 Hz ref)
+        Tier 1: 500 Hz BPSK 1/3       — ~88 bps,  -12 dB
+        Tier 2: 1 kHz BPSK 1/2        — ~265 bps,  -8 dB
+        Tier 3: 1.5 kHz QPSK 1/2      — ~796 bps,  -5 dB
+        Tier 4: 2 kHz QPSK 1/2        — ~1.1 kbps, -2 dB
+        Tier 5: 2.5 kHz QPSK 1/2      — ~1.3 kbps, +1 dB
+        Tier 6: 3 kHz 8-PSK 3/4       — ~3.6 kbps, +4 dB
+        Tier 7: 3.2 kHz 8-PSK 3/4     — ~3.8 kbps, +7 dB
+        Tier 8: 3.5 kHz 16-QAM 3/4    — ~5.6 kbps, +10 dB
+      Verbose          : Print per-transmission status to the console.
+
+    Note: Tier 0 transmissions take approximately 100 seconds for a short message.
+
+file_format: 1

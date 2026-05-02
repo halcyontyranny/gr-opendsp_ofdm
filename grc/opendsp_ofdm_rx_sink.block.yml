@@ -1,0 +1,68 @@
+id: opendsp_ofdm_rx_sink
+label: OpenDSP OFDM RX Sink
+category: '[OpenDSP OFDM]'
+flags: [python]
+
+parameters:
+-   id: callsign
+    label: Callsign
+    dtype: string
+    default: '"N0CALL"'
+    hide: none
+-   id: force_tier
+    label: ACM Tier (-1=adaptive)
+    dtype: int
+    default: '-1'
+    hide: none
+-   id: verbose
+    label: Verbose
+    dtype: enum
+    default: 'False'
+    options: ['False', 'True']
+    option_labels: ['Off', 'On']
+    hide: part
+
+inputs:
+-   domain: stream
+    dtype: float
+    label: in
+    vlen: 1
+
+outputs:
+-   domain: message
+    id: frame_out
+    optional: false
+
+templates:
+    imports: from gnuradio import opendsp_ofdm
+    make: opendsp_ofdm.rx_sink(${callsign}, ${force_tier}, ${verbose})
+    callbacks:
+    - set_force_tier(${force_tier})
+    - set_verbose(${verbose})
+
+documentation: |-
+    OpenDSP OFDM RX Sink
+
+    Demodulates float32 OFDM samples (8000 Hz) and decodes frames.
+    Connect an Audio Source or SDR source at 8000 sps to the float input.
+    Decoded frames appear on the frame_out message port as PDU pairs.
+
+    frame_out message format:
+      pmt.cons(metadata_dict, pmt.string_to_symbol(decoded_text))
+
+      metadata_dict keys:
+        "callsign" -> string  (sender's callsign)
+        "tier"     -> long    (ACM tier the frame was received on)
+        "fec_ok"   -> bool    (True if LDPC parity checks passed)
+
+    Connect frame_out to a QT GUI Message Edit Box (in display mode),
+    a blocks.message_debug, or any PDU-aware block.
+
+    Parameters:
+      Callsign         : Local callsign (currently informational; not used for filtering).
+      ACM Tier (-1=adaptive): Force receive tier, or -1 to follow the sender's
+                        tier as reported in the ACM header.
+      Verbose          : Print per-symbol SNR, ACM status, and decoded frames
+                        to the console.
+
+file_format: 1
