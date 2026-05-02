@@ -1,0 +1,470 @@
+options:
+  parameters:
+    author: KF0UXU
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: "OpenDSP OFDM on HackRF — adaptive HF OFDM via osmosdr_transceiver.\n\
+      \nSignal chain:\n  TX: opendsp_ofdm_tx_source (float, 8 kHz)\n        →\
+      \ hilbert_fc (float→complex analytic/USB signal)\n        → rational_resampler\
+      \ (\xD7250, 8 kHz→2 MHz)\n        → osmosdr_transceiver (HackRF TX)\n\
+      \  RX: osmosdr_transceiver (HackRF RX)\n        → rational_resampler (\xF7\
+      250, 2 MHz→8 kHz)\n        → complex_to_float (USB demod: take I channel)\n\
+      \        → opendsp_ofdm_rx_sink\n\nFrequency planning: set center_freq\
+      \ to your dial frequency (e.g. 14.074 MHz\nfor 20m digital). The OFDM signal\
+      \ occupies center_freq + 500 Hz to\ncenter_freq + 3500 Hz (USB convention).\n\
+      \nPTT: check the PTT box BEFORE pressing Enter in the TX message field.\nUncheck\
+      \ PTT once the transmission finishes to return to receive."
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: opendsp_ofdm_hackrf_demo
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: OpenDSP OFDM — HackRF Demo
+    window_size: (1200,900)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+
+# ── Variables ─────────────────────────────────────────────────────────────────
+
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: Modem audio rate — fixed at 8000 Hz by opendsp-ofdm design.
+    value: '8000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 100]
+    rotation: 0
+    state: enabled
+
+- name: hackrf_rate
+  id: variable
+  parameters:
+    comment: "HackRF sample rate. Must be a whole multiple of samp_rate.\n\
+      2 MHz is the HackRF minimum and gives a 250:1 resampling ratio.\n\
+      4 MHz (ratio 500:1) also works if you need a wider spectrum view."
+    value: '2000000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 100]
+    rotation: 0
+    state: enabled
+
+- name: center_freq
+  id: variable
+  parameters:
+    comment: "Dial frequency in Hz. OFDM occupies center_freq + 500 Hz to\n\
+      center_freq + 3500 Hz (USB, upper sideband). Examples:\n\
+      14.074e6 = 20m digital, 7.074e6 = 40m digital."
+    value: '14.074e6'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 100]
+    rotation: 0
+    state: enabled
+
+- name: callsign
+  id: variable
+  parameters:
+    comment: Your station callsign (up to 6 chars).
+    value: '"N0CALL"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [600, 100]
+    rotation: 0
+    state: enabled
+
+- name: force_tier
+  id: variable
+  parameters:
+    comment: "ACM tier override: -1 = adaptive.\n\
+      0=50Hz survival (~100s/msg), 4=2kHz QPSK (~1kbps), 8=3.5kHz 16QAM (~5kbps)."
+    value: '-1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [800, 100]
+    rotation: 0
+    state: enabled
+
+- name: tx_gain
+  id: variable
+  parameters:
+    comment: HackRF TX IF gain (dB). Range 0–47 dB in 1 dB steps.
+    value: '47'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1000, 100]
+    rotation: 0
+    state: enabled
+
+- name: rx_if_gain
+  id: variable
+  parameters:
+    comment: HackRF RX IF (LNA) gain (dB). 0–40 dB in 8 dB steps.
+    value: '24'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 180]
+    rotation: 0
+    state: enabled
+
+- name: rx_bb_gain
+  id: variable
+  parameters:
+    comment: HackRF RX baseband (VGA) gain (dB). 0–62 dB in 2 dB steps.
+    value: '16'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 180]
+    rotation: 0
+    state: enabled
+
+# ── PTT control (GUI) ─────────────────────────────────────────────────────────
+
+- name: transmit
+  id: variable_qtgui_check_box
+  parameters:
+    comment: "PTT — check BEFORE sending a message. Uncheck when TX finishes.\n\
+      Calls osmosdr_transceiver.set_transmit(True/False) to switch the\n\
+      HackRF between transmit and receive modes."
+    'false': 'False'
+    gui_hint: 0,0,1,1
+    label: PTT (Transmit)
+    'true': 'True'
+    type: bool
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 180]
+    rotation: 0
+    state: enabled
+
+# ── GUI tab container ─────────────────────────────────────────────────────────
+
+- name: tab
+  id: qtgui_tab_widget
+  parameters:
+    comment: ''
+    gui_hint: 1,0,1,2
+    label0: TX
+    label1: RX
+    num_tabs: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [700, 180]
+    rotation: 0
+    state: enabled
+
+# ── TX message input ──────────────────────────────────────────────────────────
+
+- name: qtgui_edit_box_msg_0
+  id: qtgui_edit_box_msg
+  parameters:
+    comment: "Check PTT first, then type a message and press Enter.\n\
+      The TX source encodes, applies LDPC FEC, and streams OFDM\n\
+      samples to the HackRF at hackrf_rate."
+    gui_hint: tab@0:0,0,1,2
+    is_pair: 'False'
+    is_static: 'False'
+    key: ''
+    label: '"TX Message (check PTT first, then press Enter)"'
+    type: string
+    value: '"Hello via OFDM!"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 308]
+    rotation: 0
+    state: enabled
+
+# ── TX signal chain ───────────────────────────────────────────────────────────
+
+- name: opendsp_ofdm_tx_source_0
+  id: opendsp_ofdm_tx_source
+  parameters:
+    callsign: callsign
+    comment: "OFDM modem TX. Outputs real-valued audio-band OFDM at 8 kHz.\n\
+      Output is silence (zeros) between transmissions.\n\
+      With force_tier=-1 the ACM engine adapts based on the last\n\
+      negotiated tier from the remote station."
+    force_tier: force_tier
+    verbose: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [340, 292]
+    rotation: 0
+    state: enabled
+
+- name: hilbert_fc_0
+  id: hilbert_fc
+  parameters:
+    beta: '6.76'
+    comment: "Converts real audio to a complex analytic signal, producing\n\
+      a single-sideband (USB) envelope. Without this, the upconverted\n\
+      signal would have mirror images on both sides of center_freq.\n\
+      65 taps gives good stop-band rejection across the 4 kHz audio band."
+    num_taps: '65'
+    win: window.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 308]
+    rotation: 0
+    state: enabled
+
+- name: rational_resampler_xxx_0
+  id: rational_resampler_xxx
+  parameters:
+    comment: "Upsample from modem rate (8 kHz) to HackRF rate (2 MHz).\n\
+      interp = hackrf_rate / samp_rate = 250.\n\
+      The built-in anti-imaging filter limits the signal to < 4 kHz."
+    decim: '1'
+    fbw: '0'
+    interp: '250'
+    taps: '[]'
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 300]
+    rotation: 0
+    state: enabled
+
+# ── HackRF transceiver ────────────────────────────────────────────────────────
+
+- name: osmosdr_transceiver_0
+  id: osmosdr_transceiver
+  parameters:
+    args: ''
+    bandwidth: '0'
+    center_freq: center_freq
+    comment: "Half-duplex HackRF transceiver.\n\
+      TX input and RX output share the same center_freq.\n\
+      PTT checkbox controls set_transmit(True/False).\n\
+      The OFDM signal occupies center_freq + 500 Hz to\n\
+      center_freq + 3500 Hz in the upper sideband."
+    freq_corr: '0'
+    rf_gain: '0'
+    rx_bb_gain: rx_bb_gain
+    rx_if_gain: rx_if_gain
+    sample_rate: hackrf_rate
+    transmit: transmit
+    tx_gain: tx_gain
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1000, 380]
+    rotation: 0
+    state: enabled
+
+# ── RX signal chain ───────────────────────────────────────────────────────────
+
+- name: rational_resampler_xxx_1
+  id: rational_resampler_xxx
+  parameters:
+    comment: "Downsample from HackRF rate (2 MHz) to modem rate (8 kHz).\n\
+      decim = hackrf_rate / samp_rate = 250.\n\
+      The anti-aliasing filter prevents out-of-band signals\n\
+      from folding into the 0–4 kHz modem passband."
+    decim: '250'
+    fbw: '0'
+    interp: '1'
+    taps: '[]'
+    type: ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 468]
+    rotation: 0
+    state: enabled
+
+- name: blocks_complex_to_float_0
+  id: blocks_complex_to_float
+  parameters:
+    comment: "USB demodulation: take the I (real) component of the\n\
+      downsampled complex signal. Equivalent to a synchronous\n\
+      USB detector tuned to center_freq."
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 484]
+    rotation: 0
+    state: enabled
+
+- name: opendsp_ofdm_rx_sink_0
+  id: opendsp_ofdm_rx_sink
+  parameters:
+    callsign: callsign
+    comment: "OFDM modem RX. Searches for ZC preamble sync, demodulates\n\
+      symbols, applies LDPC FEC, and posts decoded frames to frame_out.\n\
+      Verbose prints per-symbol SNR and ACM tier to the console."
+    force_tier: force_tier
+    verbose: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [340, 484]
+    rotation: 0
+    state: enabled
+
+- name: blocks_message_debug_0
+  id: blocks_message_debug
+  parameters:
+    comment: "Decoded frames printed in the GRC console.\n\
+      PDU format: ({callsign, tier, fec_ok}, decoded_text)"
+    en_uvec: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [120, 484]
+    rotation: 0
+    state: enabled
+
+# ── Spectrum displays ─────────────────────────────────────────────────────────
+
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
+  parameters:
+    autoscale: 'False'
+    average: '0.2'
+    axislabels: 'True'
+    bw: hackrf_rate
+    comment: "Wideband HF spectrum at the HackRF sample rate.\n\
+      The OFDM signal appears as a narrow ridge near center_freq.\n\
+      Span = hackrf_rate = 2 MHz (+/-1 MHz from center_freq)."
+    fc: center_freq
+    fftsize: '4096'
+    freqhalf: 'False'
+    grid: 'True'
+    gui_hint: tab@1:0,0,1,2
+    label: '"HackRF RX Spectrum"'
+    name: '"HackRF RX Spectrum"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    type: complex
+    update_time: '0.10'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1000, 484]
+    rotation: 0
+    state: enabled
+
+- name: qtgui_freq_sink_x_1
+  id: qtgui_freq_sink_x
+  parameters:
+    autoscale: 'False'
+    average: '0.2'
+    axislabels: 'True'
+    bw: samp_rate
+    comment: "TX OFDM audio spectrum at 8 kHz. The occupied bandwidth\n\
+      shifts with ACM tier: 50 Hz (tier 0) to 3.5 kHz (tier 8).\n\
+      Frequencies shown are the audio-band offsets; add center_freq\n\
+      to get the on-air RF frequencies."
+    fc: '0'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'True'
+    gui_hint: tab@0:1,0,1,2
+    label: '"TX Audio Spectrum"'
+    name: '"TX Audio Spectrum"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    type: float
+    update_time: '0.10'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 180]
+    rotation: 0
+    state: enabled
+
+# ── Connections ───────────────────────────────────────────────────────────────
+
+connections:
+
+# TX stream: modem → hilbert (USB) → upsample → HackRF
+- [opendsp_ofdm_tx_source_0, '0', hilbert_fc_0, '0']
+- [hilbert_fc_0, '0', rational_resampler_xxx_0, '0']
+- [rational_resampler_xxx_0, '0', osmosdr_transceiver_0, '0']
+
+# TX spectrum: tap modem audio output before hilbert
+- [opendsp_ofdm_tx_source_0, '0', qtgui_freq_sink_x_1, '0']
+
+# RX stream: HackRF → downsample → USB demod (complex→float) → modem
+- [osmosdr_transceiver_0, '0', rational_resampler_xxx_1, '0']
+- [rational_resampler_xxx_1, '0', blocks_complex_to_float_0, '0']
+- [blocks_complex_to_float_0, '0', opendsp_ofdm_rx_sink_0, '0']
+
+# RX spectrum: tap wideband IQ directly from HackRF
+- [osmosdr_transceiver_0, '0', qtgui_freq_sink_x_0, '0']
+
+# TX message: edit box → modem message port
+- [qtgui_edit_box_msg_0, msg, opendsp_ofdm_tx_source_0, msg_in]
+
+# RX message: decoded frames → console
+- [opendsp_ofdm_rx_sink_0, frame_out, blocks_message_debug_0, print]
+
+metadata:
+  file_format: 1
