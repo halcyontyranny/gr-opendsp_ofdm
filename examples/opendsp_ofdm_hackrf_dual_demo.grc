@@ -6,7 +6,9 @@ options:
     cmake_opt: ''
     comment: ''
     copyright: ''
-    description: OpenDSP OFDM dual-HackRF demo -- two independent half-duplex stations sharing center_freq. Set hackrf_a_args / hackrf_b_args to select devices (e.g. hackrf=0, hackrf=1, or hackrf=<serial>).
+    description: OpenDSP OFDM dual-HackRF demo -- two independent half-duplex stations
+      sharing center_freq. Set hackrf_a_args / hackrf_b_args to select devices (e.g.
+      hackrf=0, hackrf=1, or hackrf=<serial>).
     gen_cmake: 'On'
     gen_linking: dynamic
     generate_options: qt_gui
@@ -33,74 +35,6 @@ options:
     state: enabled
 
 blocks:
-
-# -- Variables --
-
-- name: samp_rate
-  id: variable
-  parameters:
-    comment: Modem audio rate -- fixed at 8000 Hz.
-    value: '8000'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [8, 100]
-    rotation: 0
-    state: enabled
-
-- name: hackrf_rate
-  id: variable
-  parameters:
-    comment: HackRF sample rate. 2 MHz minimum; gives 250:1 resampling ratio.
-    value: '2000000'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [160, 100]
-    rotation: 0
-    state: enabled
-
-- name: center_freq
-  id: variable
-  parameters:
-    comment: Shared dial frequency in Hz. Both HackRFs tune here for loopback testing.
-    value: '14.074e6'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [320, 100]
-    rotation: 0
-    state: enabled
-
-- name: hackrf_a_args
-  id: variable
-  parameters:
-    comment: Device string for HackRF A. Use hackrf=0, hackrf=1, or hackrf=<serial>.
-    value: '"hackrf=0"'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [480, 100]
-    rotation: 0
-    state: enabled
-
-- name: hackrf_b_args
-  id: variable
-  parameters:
-    comment: Device string for HackRF B. Use hackrf=0, hackrf=1, or hackrf=<serial>.
-    value: '"hackrf=1"'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [680, 100]
-    rotation: 0
-    state: enabled
-
 - name: callsign_a
   id: variable
   parameters:
@@ -113,7 +47,6 @@ blocks:
     coordinate: [880, 100]
     rotation: 0
     state: enabled
-
 - name: callsign_b
   id: variable
   parameters:
@@ -126,12 +59,24 @@ blocks:
     coordinate: [1080, 100]
     rotation: 0
     state: enabled
-
+- name: center_freq
+  id: variable
+  parameters:
+    comment: Shared dial frequency in Hz. Both HackRFs tune here for loopback testing.
+    value: 144e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [320, 100]
+    rotation: 0
+    state: enabled
 - name: force_tier
   id: variable
   parameters:
-    comment: 'ACM tier override: -1 = adaptive. 0=50 Hz survival, 4=2 kHz QPSK, 8=3.5 kHz 16QAM.'
-    value: '-1'
+    comment: 'ACM tier override: -1 = adaptive. 0=50 Hz survival, 4=2 kHz QPSK, 8=3.5
+      kHz 16QAM.'
+    value: '0'
   states:
     bus_sink: false
     bus_source: false
@@ -139,33 +84,42 @@ blocks:
     coordinate: [8, 180]
     rotation: 0
     state: enabled
-
-- name: tx_gain
+- name: hackrf_a_args
   id: variable
   parameters:
-    comment: HackRF TX IF gain (dB). 0-47 dB in 1 dB steps.
-    value: '47'
+    comment: Device string for HackRF A. Use hackrf=0, hackrf=1, or hackrf=<serial>.
+    value: '"hackrf=0"'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [200, 180]
+    coordinate: [480, 100]
     rotation: 0
     state: enabled
-
-- name: rx_if_gain
+- name: hackrf_b_args
   id: variable
   parameters:
-    comment: HackRF RX IF (LNA) gain (dB). 0-40 dB in 8 dB steps.
-    value: '24'
+    comment: Device string for HackRF B. Use hackrf=0, hackrf=1, or hackrf=<serial>.
+    value: '"hackrf=1"'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [360, 180]
+    coordinate: [680, 100]
     rotation: 0
     state: enabled
-
+- name: hackrf_rate
+  id: variable
+  parameters:
+    comment: HackRF sample rate. 2 MHz minimum; gives 250:1 resampling ratio.
+    value: '2000000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [160, 100]
+    rotation: 0
+    state: enabled
 - name: rx_bb_gain
   id: variable
   parameters:
@@ -178,9 +132,30 @@ blocks:
     coordinate: [520, 180]
     rotation: 0
     state: enabled
-
-# -- PTT controls --
-
+- name: rx_if_gain
+  id: variable
+  parameters:
+    comment: HackRF RX IF (LNA) gain (dB). 0-40 dB in 8 dB steps.
+    value: '24'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [360, 180]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: Modem audio rate -- fixed at 8000 Hz.
+    value: '8000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 100]
+    rotation: 0
+    state: enabled
 - name: transmit_a
   id: variable_qtgui_check_box
   parameters:
@@ -198,7 +173,6 @@ blocks:
     coordinate: [700, 180]
     rotation: 0
     state: enabled
-
 - name: transmit_b
   id: variable_qtgui_check_box
   parameters:
@@ -216,68 +190,87 @@ blocks:
     coordinate: [900, 180]
     rotation: 0
     state: enabled
-
-# -- GUI tab container --
-
-- name: tab
-  id: qtgui_tab_widget
+- name: tx_gain
+  id: variable
   parameters:
-    comment: ''
-    gui_hint: 1,0,1,2
-    label0: A-TX
-    label1: A-RX
-    label2: B-TX
-    label3: B-RX
-    num_tabs: '4'
+    comment: HackRF TX IF gain (dB). 0-47 dB in 1 dB steps.
+    value: '47'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1100, 180]
+    coordinate: [200, 180]
     rotation: 0
     state: enabled
-
-# -- Station A: TX --
-
-- name: qtgui_edit_box_msg_a
-  id: qtgui_edit_box_msg
+- name: blocks_complex_to_float_a
+  id: blocks_complex_to_float
   parameters:
-    comment: Station A TX input. Check PTT A first, then press Enter to transmit.
-    gui_hint: tab@0:0,0,1,2
-    is_pair: 'False'
-    is_static: 'False'
-    key: ''
-    label: '"Station A TX (check PTT A first)"'
-    type: string
-    value: '"Hello from Station A!"'
+    affinity: ''
+    alias: ''
+    comment: Station A USB demod -- take I (real) channel.
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 308]
+    coordinate: [500, 484]
     rotation: 0
     state: enabled
-
-- name: opendsp_ofdm_tx_source_a
-  id: opendsp_ofdm_tx_source
+- name: blocks_complex_to_float_b
+  id: blocks_complex_to_float
   parameters:
-    callsign: callsign_a
-    comment: Station A OFDM TX. Outputs real 8 kHz OFDM audio.
-    force_tier: force_tier
-    verbose: 'True'
+    affinity: ''
+    alias: ''
+    comment: Station B USB demod -- take I (real) channel.
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [280, 292]
+    coordinate: [500, 844]
     rotation: 0
     state: enabled
-
+- name: blocks_message_debug_a
+  id: blocks_message_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Station A decoded frames -- printed to GRC console.
+    en_uvec: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [60, 484]
+    rotation: 0
+    state: enabled
+- name: blocks_message_debug_b
+  id: blocks_message_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Station B decoded frames -- printed to GRC console.
+    en_uvec: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [60, 844]
+    rotation: 0
+    state: enabled
 - name: hilbert_fc_a
   id: hilbert_fc
   parameters:
+    affinity: ''
+    alias: ''
     beta: '6.76'
     comment: Station A USB analytic signal (real float -> complex IQ).
+    maxoutbuf: '0'
+    minoutbuf: '0'
     num_taps: '65'
     win: window.WIN_HAMMING
   states:
@@ -287,65 +280,108 @@ blocks:
     coordinate: [500, 308]
     rotation: 0
     state: enabled
-
-- name: rational_resampler_tx_a
-  id: rational_resampler_xxx
+- name: hilbert_fc_b
+  id: hilbert_fc
   parameters:
-    comment: Station A TX upsample 8 kHz -> 2 MHz (x250).
-    decim: '1'
-    fbw: '0'
-    interp: '250'
-    taps: '[]'
-    type: ccc
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: Station B USB analytic signal (real float -> complex IQ).
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_taps: '65'
+    win: window.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [700, 300]
+    coordinate: [500, 668]
     rotation: 0
     state: enabled
-
-- name: qtgui_freq_sink_tx_a
-  id: qtgui_freq_sink_x
+- name: opendsp_ofdm_rx_sink_a
+  id: opendsp_ofdm_rx_sink
   parameters:
-    autoscale: 'False'
-    average: '0.2'
-    axislabels: 'True'
-    bw: samp_rate
-    comment: Station A TX audio spectrum. Bandwidth shifts with ACM tier.
-    fc: '0'
-    fftsize: '1024'
-    freqhalf: 'True'
-    grid: 'True'
-    gui_hint: tab@0:1,0,1,2
-    label: '"A: TX Audio Spectrum"'
-    name: '"A: TX Audio Spectrum"'
-    nconnections: '1'
-    norm_window: 'False'
-    showports: 'False'
-    type: float
-    update_time: '0.10'
-    wintype: window.WIN_BLACKMAN_hARRIS
-    ymax: '10'
-    ymin: '-140'
+    affinity: ''
+    alias: ''
+    callsign: callsign_a
+    comment: Station A OFDM RX. Decoded frames posted to frame_out.
+    force_tier: force_tier
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    verbose: 'True'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [280, 180]
+    coordinate: [280, 484]
     rotation: 0
     state: enabled
-
-# -- Station A: HackRF --
-
+- name: opendsp_ofdm_rx_sink_b
+  id: opendsp_ofdm_rx_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    callsign: callsign_b
+    comment: Station B OFDM RX. Decoded frames posted to frame_out.
+    force_tier: force_tier
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    verbose: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 844]
+    rotation: 0
+    state: enabled
+- name: opendsp_ofdm_tx_source_a
+  id: opendsp_ofdm_tx_source
+  parameters:
+    affinity: ''
+    alias: ''
+    callsign: callsign_a
+    comment: Station A OFDM TX. Outputs real 8 kHz OFDM audio.
+    force_tier: force_tier
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    verbose: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 292]
+    rotation: 0
+    state: enabled
+- name: opendsp_ofdm_tx_source_b
+  id: opendsp_ofdm_tx_source
+  parameters:
+    affinity: ''
+    alias: ''
+    callsign: callsign_b
+    comment: Station B OFDM TX. Outputs real 8 kHz OFDM audio.
+    force_tier: force_tier
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    verbose: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 652]
+    rotation: 0
+    state: enabled
 - name: osmosdr_transceiver_a
   id: osmosdr_transceiver
   parameters:
+    affinity: ''
+    alias: ''
     args: hackrf_a_args
     bandwidth: '0'
     center_freq: center_freq
     comment: HackRF A half-duplex transceiver. transmit_a controls TX/RX switching.
     freq_corr: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
     rf_gain: '0'
     rx_bb_gain: rx_bb_gain
     rx_if_gain: rx_if_gain
@@ -359,207 +395,18 @@ blocks:
     coordinate: [940, 380]
     rotation: 0
     state: enabled
-
-# -- Station A: RX --
-
-- name: rational_resampler_rx_a
-  id: rational_resampler_xxx
-  parameters:
-    comment: Station A RX downsample 2 MHz -> 8 kHz (/250).
-    decim: '250'
-    fbw: '0'
-    interp: '1'
-    taps: '[]'
-    type: ccf
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [700, 468]
-    rotation: 0
-    state: enabled
-
-- name: blocks_complex_to_float_a
-  id: blocks_complex_to_float
-  parameters:
-    comment: Station A USB demod -- take I (real) channel.
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [500, 484]
-    rotation: 0
-    state: enabled
-
-- name: opendsp_ofdm_rx_sink_a
-  id: opendsp_ofdm_rx_sink
-  parameters:
-    callsign: callsign_a
-    comment: Station A OFDM RX. Decoded frames posted to frame_out.
-    force_tier: force_tier
-    verbose: 'True'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [280, 484]
-    rotation: 0
-    state: enabled
-
-- name: blocks_message_debug_a
-  id: blocks_message_debug
-  parameters:
-    comment: Station A decoded frames -- printed to GRC console.
-    en_uvec: 'True'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [60, 484]
-    rotation: 0
-    state: enabled
-
-- name: qtgui_freq_sink_rx_a
-  id: qtgui_freq_sink_x
-  parameters:
-    autoscale: 'False'
-    average: '0.2'
-    axislabels: 'True'
-    bw: hackrf_rate
-    comment: Station A wideband HF spectrum from HackRF A (2 MHz span).
-    fc: center_freq
-    fftsize: '4096'
-    freqhalf: 'False'
-    grid: 'True'
-    gui_hint: tab@1:0,0,1,2
-    label: '"A: HackRF RX Spectrum"'
-    name: '"A: HackRF RX Spectrum"'
-    nconnections: '1'
-    norm_window: 'False'
-    showports: 'False'
-    type: complex
-    update_time: '0.10'
-    wintype: window.WIN_BLACKMAN_hARRIS
-    ymax: '10'
-    ymin: '-140'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [940, 484]
-    rotation: 0
-    state: enabled
-
-# -- Station B: TX --
-
-- name: qtgui_edit_box_msg_b
-  id: qtgui_edit_box_msg
-  parameters:
-    comment: Station B TX input. Check PTT B first, then press Enter to transmit.
-    gui_hint: tab@2:0,0,1,2
-    is_pair: 'False'
-    is_static: 'False'
-    key: ''
-    label: '"Station B TX (check PTT B first)"'
-    type: string
-    value: '"Hello from Station B!"'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [8, 668]
-    rotation: 0
-    state: enabled
-
-- name: opendsp_ofdm_tx_source_b
-  id: opendsp_ofdm_tx_source
-  parameters:
-    callsign: callsign_b
-    comment: Station B OFDM TX. Outputs real 8 kHz OFDM audio.
-    force_tier: force_tier
-    verbose: 'True'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [280, 652]
-    rotation: 0
-    state: enabled
-
-- name: hilbert_fc_b
-  id: hilbert_fc
-  parameters:
-    beta: '6.76'
-    comment: Station B USB analytic signal (real float -> complex IQ).
-    num_taps: '65'
-    win: window.WIN_HAMMING
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [500, 668]
-    rotation: 0
-    state: enabled
-
-- name: rational_resampler_tx_b
-  id: rational_resampler_xxx
-  parameters:
-    comment: Station B TX upsample 8 kHz -> 2 MHz (x250).
-    decim: '1'
-    fbw: '0'
-    interp: '250'
-    taps: '[]'
-    type: ccc
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [700, 660]
-    rotation: 0
-    state: enabled
-
-- name: qtgui_freq_sink_tx_b
-  id: qtgui_freq_sink_x
-  parameters:
-    autoscale: 'False'
-    average: '0.2'
-    axislabels: 'True'
-    bw: samp_rate
-    comment: Station B TX audio spectrum. Bandwidth shifts with ACM tier.
-    fc: '0'
-    fftsize: '1024'
-    freqhalf: 'True'
-    grid: 'True'
-    gui_hint: tab@2:1,0,1,2
-    label: '"B: TX Audio Spectrum"'
-    name: '"B: TX Audio Spectrum"'
-    nconnections: '1'
-    norm_window: 'False'
-    showports: 'False'
-    type: float
-    update_time: '0.10'
-    wintype: window.WIN_BLACKMAN_hARRIS
-    ymax: '10'
-    ymin: '-140'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [280, 560]
-    rotation: 0
-    state: enabled
-
-# -- Station B: HackRF --
-
 - name: osmosdr_transceiver_b
   id: osmosdr_transceiver
   parameters:
+    affinity: ''
+    alias: ''
     args: hackrf_b_args
     bandwidth: '0'
     center_freq: center_freq
     comment: HackRF B half-duplex transceiver. transmit_b controls TX/RX switching.
     freq_corr: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
     rf_gain: '0'
     rx_bb_gain: rx_bb_gain
     rx_if_gain: rx_if_gain
@@ -573,87 +420,202 @@ blocks:
     coordinate: [940, 740]
     rotation: 0
     state: enabled
-
-# -- Station B: RX --
-
-- name: rational_resampler_rx_b
-  id: rational_resampler_xxx
+- name: qtgui_edit_box_msg_a
+  id: qtgui_edit_box_msg
   parameters:
-    comment: Station B RX downsample 2 MHz -> 8 kHz (/250).
-    decim: '250'
-    fbw: '0'
-    interp: '1'
-    taps: '[]'
-    type: ccf
+    affinity: ''
+    alias: ''
+    comment: Station A TX input. Check PTT A first, then press Enter to transmit.
+    gui_hint: tab@0:0,0,1,2
+    is_pair: 'False'
+    is_static: 'False'
+    key: ''
+    label: '"Station A TX (check PTT A first)"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: string
+    value: '"Hello from Station A!"'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [700, 828]
+    coordinate: [8, 308]
     rotation: 0
     state: enabled
-
-- name: blocks_complex_to_float_b
-  id: blocks_complex_to_float
+- name: qtgui_edit_box_msg_b
+  id: qtgui_edit_box_msg
   parameters:
-    comment: Station B USB demod -- take I (real) channel.
-    vlen: '1'
+    affinity: ''
+    alias: ''
+    comment: Station B TX input. Check PTT B first, then press Enter to transmit.
+    gui_hint: tab@2:0,0,1,2
+    is_pair: 'False'
+    is_static: 'False'
+    key: ''
+    label: '"Station B TX (check PTT B first)"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: string
+    value: '"Hello from Station B!"'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [500, 844]
+    coordinate: [8, 668]
     rotation: 0
     state: enabled
-
-- name: opendsp_ofdm_rx_sink_b
-  id: opendsp_ofdm_rx_sink
-  parameters:
-    callsign: callsign_b
-    comment: Station B OFDM RX. Decoded frames posted to frame_out.
-    force_tier: force_tier
-    verbose: 'True'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [280, 844]
-    rotation: 0
-    state: enabled
-
-- name: blocks_message_debug_b
-  id: blocks_message_debug
-  parameters:
-    comment: Station B decoded frames -- printed to GRC console.
-    en_uvec: 'True'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [60, 844]
-    rotation: 0
-    state: enabled
-
-- name: qtgui_freq_sink_rx_b
+- name: qtgui_freq_sink_rx_a
   id: qtgui_freq_sink_x
   parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
     autoscale: 'False'
     average: '0.2'
     axislabels: 'True'
     bw: hackrf_rate
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: Station A wideband HF spectrum from HackRF A (2 MHz span).
+    ctrlpanel: 'False'
+    fc: center_freq
+    fftsize: '4096'
+    freqhalf: 'False'
+    grid: 'True'
+    gui_hint: tab@1:0,0,1,2
+    label: '"A: HackRF RX Spectrum"'
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"A: HackRF RX Spectrum"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [940, 484]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_rx_b
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '0.2'
+    axislabels: 'True'
+    bw: hackrf_rate
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
     comment: Station B wideband HF spectrum from HackRF B (2 MHz span).
+    ctrlpanel: 'False'
     fc: center_freq
     fftsize: '4096'
     freqhalf: 'False'
     grid: 'True'
     gui_hint: tab@3:0,0,1,2
     label: '"B: HackRF RX Spectrum"'
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
     name: '"B: HackRF RX Spectrum"'
     nconnections: '1'
     norm_window: 'False'
     showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
     type: complex
+    units: dB
     update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
     wintype: window.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
@@ -664,50 +626,892 @@ blocks:
     coordinate: [940, 844]
     rotation: 0
     state: enabled
+- name: qtgui_freq_sink_tx_a
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '0.2'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: Station A TX audio spectrum. Bandwidth shifts with ACM tier.
+    ctrlpanel: 'False'
+    fc: '0'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'True'
+    gui_hint: tab@0:1,0,1,2
+    label: '"A: TX Audio Spectrum"'
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"A: TX Audio Spectrum"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: float
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 180]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_tx_b
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '0.2'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: Station B TX audio spectrum. Bandwidth shifts with ACM tier.
+    ctrlpanel: 'False'
+    fc: '0'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'True'
+    gui_hint: tab@2:1,0,1,2
+    label: '"B: TX Audio Spectrum"'
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"B: TX Audio Spectrum"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: float
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 560]
+    rotation: 0
+    state: enabled
+- name: rational_resampler_rx_a
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Station A RX downsample 2 MHz -> 8 kHz (/250).
+    decim: '250'
+    fbw: '0'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: '[]'
+    type: ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [700, 468]
+    rotation: 0
+    state: enabled
+- name: rational_resampler_rx_b
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Station B RX downsample 2 MHz -> 8 kHz (/250).
+    decim: '250'
+    fbw: '0'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: '[]'
+    type: ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [700, 828]
+    rotation: 0
+    state: enabled
+- name: rational_resampler_tx_a
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Station A TX upsample 8 kHz -> 2 MHz (x250).
+    decim: '1'
+    fbw: '0'
+    interp: '250'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: '[]'
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [700, 300]
+    rotation: 0
+    state: enabled
+- name: rational_resampler_tx_b
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Station B TX upsample 8 kHz -> 2 MHz (x250).
+    decim: '1'
+    fbw: '0'
+    interp: '250'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: '[]'
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [700, 660]
+    rotation: 0
+    state: enabled
+# -- New display blocks --
 
-# -- Connections --
+- name: qtgui_const_sink_rx_a
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '0.8'
+    alpha2: '0.8'
+    alpha3: '0.8'
+    alpha4: '0.8'
+    alpha5: '0.8'
+    alpha6: '0.8'
+    alpha7: '0.8'
+    alpha8: '0.8'
+    alpha9: '0.8'
+    alpha10: '0.8'
+    comment: Station A RX IQ constellation at 8 kHz (shows modulation symbol cloud).
+    gui_hint: tab@1:2,0,1,2
+    label1: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    label10: ''
+    legend: 'True'
+    marker1: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    marker10: '0'
+    name: '"A: RX IQ Constellation"'
+    nconnections: '1'
+    showports: 'False'
+    style1: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    style10: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    width10: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [940, 580]
+    rotation: 0
+    state: enabled
+
+- name: qtgui_const_sink_rx_b
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '0.8'
+    alpha2: '0.8'
+    alpha3: '0.8'
+    alpha4: '0.8'
+    alpha5: '0.8'
+    alpha6: '0.8'
+    alpha7: '0.8'
+    alpha8: '0.8'
+    alpha9: '0.8'
+    alpha10: '0.8'
+    comment: Station B RX IQ constellation at 8 kHz.
+    gui_hint: tab@3:2,0,1,2
+    label1: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    label10: ''
+    legend: 'True'
+    marker1: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    marker10: '0'
+    name: '"B: RX IQ Constellation"'
+    nconnections: '1'
+    showports: 'False'
+    style1: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    style10: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    width10: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [940, 940]
+    rotation: 0
+    state: enabled
+
+- name: qtgui_edit_box_msg_rx_a
+  id: qtgui_edit_box_msg
+  parameters:
+    comment: Last decoded message received at Station A. Updated on each decoded frame.
+    gui_hint: tab@1:3,0,1,2
+    is_pair: 'True'
+    is_static: 'True'
+    key: ''
+    label: '"Last Received at A"'
+    type: string
+    value: '"(none yet)"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 580]
+    rotation: 0
+    state: enabled
+
+- name: qtgui_edit_box_msg_rx_b
+  id: qtgui_edit_box_msg
+  parameters:
+    comment: Last decoded message received at Station B.
+    gui_hint: tab@3:3,0,1,2
+    is_pair: 'True'
+    is_static: 'True'
+    key: ''
+    label: '"Last Received at B"'
+    type: string
+    value: '"(none yet)"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 940]
+    rotation: 0
+    state: enabled
+
+- name: qtgui_time_sink_rx_a
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    alpha10: '1.0'
+    color1: blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    color10: dark blue
+    comment: Station A RX IQ time domain at 8 kHz -- I (blue) and Q (red).
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: tab@1:1,0,1,2
+    label1: I
+    label2: Q
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    label10: ''
+    legend: 'True'
+    marker1: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    marker10: '-1'
+    name: '"A: RX IQ"'
+    nconnections: '1'
+    ntpts: '1024'
+    samp_rate: samp_rate
+    showports: 'False'
+    stem: 'False'
+    style1: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    style10: '1'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    width10: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [940, 500]
+    rotation: 0
+    state: enabled
+
+- name: qtgui_time_sink_rx_b
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    alpha10: '1.0'
+    color1: blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    color10: dark blue
+    comment: Station B RX IQ time domain at 8 kHz -- I (blue) and Q (red).
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: tab@3:1,0,1,2
+    label1: I
+    label2: Q
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    label10: ''
+    legend: 'True'
+    marker1: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    marker10: '-1'
+    name: '"B: RX IQ"'
+    nconnections: '1'
+    ntpts: '1024'
+    samp_rate: samp_rate
+    showports: 'False'
+    stem: 'False'
+    style1: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    style10: '1'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    width10: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [940, 860]
+    rotation: 0
+    state: enabled
+
+- name: qtgui_time_sink_tx_a
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    alpha10: '1.0'
+    color1: blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    color10: dark blue
+    comment: Station A TX IQ at 8 kHz (hilbert output) -- I (blue) and Q (red).
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: tab@0:2,0,1,2
+    label1: I
+    label2: Q
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    label10: ''
+    legend: 'True'
+    marker1: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    marker10: '-1'
+    name: '"A: TX IQ"'
+    nconnections: '1'
+    ntpts: '1024'
+    samp_rate: samp_rate
+    showports: 'False'
+    stem: 'False'
+    style1: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    style10: '1'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    width10: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 380]
+    rotation: 0
+    state: enabled
+
+- name: qtgui_time_sink_tx_b
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    alpha10: '1.0'
+    color1: blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    color10: dark blue
+    comment: Station B TX IQ at 8 kHz (hilbert output) -- I (blue) and Q (red).
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: tab@2:2,0,1,2
+    label1: I
+    label2: Q
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    label10: ''
+    legend: 'True'
+    marker1: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    marker10: '-1'
+    name: '"B: TX IQ"'
+    nconnections: '1'
+    ntpts: '1024'
+    samp_rate: samp_rate
+    showports: 'False'
+    stem: 'False'
+    style1: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    style10: '1'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    width10: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 740]
+    rotation: 0
+    state: enabled
+
+- name: tab
+  id: qtgui_tab_widget
+  parameters:
+    alias: ''
+    comment: ''
+    gui_hint: 1,0,1,2
+    label0: A-TX
+    label1: A-RX
+    label10: Tab 10
+    label11: Tab 11
+    label12: Tab 12
+    label13: Tab 13
+    label14: Tab 14
+    label15: Tab 15
+    label16: Tab 16
+    label17: Tab 17
+    label18: Tab 18
+    label19: Tab 19
+    label2: B-TX
+    label3: B-RX
+    label4: Tab 4
+    label5: Tab 5
+    label6: Tab 6
+    label7: Tab 7
+    label8: Tab 8
+    label9: Tab 9
+    num_tabs: '4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1100, 180]
+    rotation: 0
+    state: enabled
 
 connections:
-
-# Station A TX: modem -> hilbert (USB) -> upsample -> HackRF A
-- [opendsp_ofdm_tx_source_a, '0', hilbert_fc_a, '0']
-- [hilbert_fc_a, '0', rational_resampler_tx_a, '0']
-- [rational_resampler_tx_a, '0', osmosdr_transceiver_a, '0']
-
-# Station A TX spectrum: tap modem audio before hilbert
-- [opendsp_ofdm_tx_source_a, '0', qtgui_freq_sink_tx_a, '0']
-
-# Station A RX: HackRF A -> downsample -> USB demod -> modem
-- [osmosdr_transceiver_a, '0', rational_resampler_rx_a, '0']
-- [rational_resampler_rx_a, '0', blocks_complex_to_float_a, '0']
 - [blocks_complex_to_float_a, '0', opendsp_ofdm_rx_sink_a, '0']
-
-# Station A RX spectrum: tap wideband IQ from HackRF A
-- [osmosdr_transceiver_a, '0', qtgui_freq_sink_rx_a, '0']
-
-# Station A messages
-- [qtgui_edit_box_msg_a, msg, opendsp_ofdm_tx_source_a, msg_in]
-- [opendsp_ofdm_rx_sink_a, frame_out, blocks_message_debug_a, print]
-
-# Station B TX: modem -> hilbert (USB) -> upsample -> HackRF B
-- [opendsp_ofdm_tx_source_b, '0', hilbert_fc_b, '0']
-- [hilbert_fc_b, '0', rational_resampler_tx_b, '0']
-- [rational_resampler_tx_b, '0', osmosdr_transceiver_b, '0']
-
-# Station B TX spectrum: tap modem audio before hilbert
-- [opendsp_ofdm_tx_source_b, '0', qtgui_freq_sink_tx_b, '0']
-
-# Station B RX: HackRF B -> downsample -> USB demod -> modem
-- [osmosdr_transceiver_b, '0', rational_resampler_rx_b, '0']
-- [rational_resampler_rx_b, '0', blocks_complex_to_float_b, '0']
 - [blocks_complex_to_float_b, '0', opendsp_ofdm_rx_sink_b, '0']
-
-# Station B RX spectrum: tap wideband IQ from HackRF B
-- [osmosdr_transceiver_b, '0', qtgui_freq_sink_rx_b, '0']
-
-# Station B messages
-- [qtgui_edit_box_msg_b, msg, opendsp_ofdm_tx_source_b, msg_in]
+- [hilbert_fc_a, '0', qtgui_time_sink_tx_a, '0']
+- [hilbert_fc_a, '0', rational_resampler_tx_a, '0']
+- [hilbert_fc_b, '0', qtgui_time_sink_tx_b, '0']
+- [hilbert_fc_b, '0', rational_resampler_tx_b, '0']
+- [opendsp_ofdm_rx_sink_a, frame_out, blocks_message_debug_a, print]
 - [opendsp_ofdm_rx_sink_b, frame_out, blocks_message_debug_b, print]
+- [opendsp_ofdm_rx_sink_a, frame_out, qtgui_edit_box_msg_rx_a, back]
+- [opendsp_ofdm_rx_sink_b, frame_out, qtgui_edit_box_msg_rx_b, back]
+- [opendsp_ofdm_tx_source_a, '0', hilbert_fc_a, '0']
+- [opendsp_ofdm_tx_source_a, '0', qtgui_freq_sink_tx_a, '0']
+- [opendsp_ofdm_tx_source_b, '0', hilbert_fc_b, '0']
+- [opendsp_ofdm_tx_source_b, '0', qtgui_freq_sink_tx_b, '0']
+- [osmosdr_transceiver_a, '0', qtgui_freq_sink_rx_a, '0']
+- [osmosdr_transceiver_a, '0', rational_resampler_rx_a, '0']
+- [osmosdr_transceiver_b, '0', qtgui_freq_sink_rx_b, '0']
+- [osmosdr_transceiver_b, '0', rational_resampler_rx_b, '0']
+- [qtgui_edit_box_msg_a, msg, opendsp_ofdm_tx_source_a, msg_in]
+- [qtgui_edit_box_msg_b, msg, opendsp_ofdm_tx_source_b, msg_in]
+- [rational_resampler_rx_a, '0', blocks_complex_to_float_a, '0']
+- [rational_resampler_rx_a, '0', qtgui_const_sink_rx_a, '0']
+- [rational_resampler_rx_a, '0', qtgui_time_sink_rx_a, '0']
+- [rational_resampler_rx_b, '0', blocks_complex_to_float_b, '0']
+- [rational_resampler_rx_b, '0', qtgui_const_sink_rx_b, '0']
+- [rational_resampler_rx_b, '0', qtgui_time_sink_rx_b, '0']
+- [rational_resampler_tx_a, '0', osmosdr_transceiver_a, '0']
+- [rational_resampler_tx_b, '0', osmosdr_transceiver_b, '0']
 
 metadata:
   file_format: 1
